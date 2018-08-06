@@ -1,0 +1,26 @@
+npm i cors
+
+const cors = require('cors');
+const express = require('express');
+const router = express.Router();
+
+router.get('/', cors(), (req, res) => { res.send('cors!') });
+
+모든 라우터에 cors()를 적용하고 싶다면 다른 미들웨어들이 있는 부분에 app.use(cors())를 합니다
+
+cors()의 경우에는 모든 요청 오리진을 허용하는 것이기 때문에 위험하니 cors({ origin: 허용 오리진 주소 })처럼 일부 허용할 주소를 넣는 게 좋습니다.
+ cors({ origin: 'https://www.zerocho.com' }) 이런 식으로요.
+
+ 서버가 노드가 아니더라도 기본적인 원리는 간단합니다. 요청 응답 헤더에 Access-Control-Allow-Origin: '*'을 넣어주면 됩니다. 
+ 
+ '*'은 모든 요청 오리진을 허용하는 것이기 때문에 위험하니 이 부분만 허용하는 오리진으로 바꿔주면 되겠죠.
+
+ 노드의 경우는 res.writeHead(200, { 'Access-Control-Allow-Origin': '*' }); 이렇게 하면 됩니다. 다른 서버도 응답 헤더를 다음과 같이 바꿔줍시다.
+
+
+ -크롬 등의 브라우저는 localhost에서는 CORS 요청이 안 되도록 막아두기도 하여 저렇게 허용을 해줘도 안 될 수도 있습니다. localhost의 경우에는 안 돼도 너무 당황하지 맙시다.
+
+ 또한 CORS 외에도 CORB(cross origin read blocking) 현상도 있습니다. CORS를 허용했더라도 POST, PUT, DELETE 요청에서 json을 전송하는 경우 요청이 차단됩니다. 이럴 때는 json 대신 www-form-urlencoded 형식으로 데이터를 보내면 됩니다.
+
+ Access-Control-Allow-Origin 외에도 관련 헤더들이 많은데 모질라 에 잘 설명되어 있습니다.
+ https://developer.mozilla.org/ko/docs/Web/HTTP/Access_control_CORS

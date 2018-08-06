@@ -1,0 +1,71 @@
+컴포넌트
+Vue.js에서 부모-자식 컴포넌트 관계는 props는 아래로, events 위로 라고 요약 할 수 있습니다.
+부모는 props를 통해 자식에게 데이터를 전달하고 자식은 events를 통해 부모에게 메시지를 보냅니다. 
+
+객체의 모든 속성을 props로 전달하려면, 인자없이 v-bind를 쓸 수 있습니다. (v-bind:prop-name 대신 v-bind). 예를 들어 todo 객체가 있다면,
+
+todo: {
+  text: 'Learn Vue',
+  isComplete: false
+}
+그런 다음,
+
+<todo-item v-bind="todo"></todo-item>
+이것은 다음과 같은 동작을합니다.:
+
+<todo-item
+  v-bind:text="todo.text"
+  v-bind:is-complete="todo.isComplete"
+></todo-item>
+
+라우터
+<router-link :to={ path: 'registe/detail', query: { plan: 'private' }}>
+
+	{{$route.params.detail}} {{$route.query.private}}
+params는 경로에 포함해야한다. 이름을 가지는 라우트는 path없이 params:{detail:2} 와 같이 전달가능
+
+라우터 속성 전달(props)
+Boolean 모드
+props를 true로 설정하면 route.params가 컴포넌트 props로 설정됩니다.
+
+객체 모드
+props가 객체일때 컴포넌트 props가 있는 그대로 설정됩니다. props가 정적일 때 유용합니다.
+
+함수 모드
+props를 반환하는 함수를 만들 수 있습니다. 이를 통해 전달인자를 다른 타입으로 캐스팅하고 적정인 값을 라우트 기반 값과 결합됩니다.  
+
+잡코리아 zkwlzk1  rltjd132
+
+
+vueX state, getters, mutations, actions 이름규칙
+스토어 모듈화
+getters 와 state v-if에 직접 쓰는거랑 getter로 가져오는 차이(둘다돼지만 왜?getter로 가져오나)
+
+
+
+* Quest 06 ~ Quest 07 을 통해, 웹 상에서 동작하는 간단한 바탕화면 시스템을 만들 예정입니다.
+* 요구사항은 다음과 같습니다:
+  * 아이콘은 폴더와 일반 아이콘, 두 가지의 종류가 있습니다.
+  * 아이콘들을 드래그를 통해 움직일 수 있어야 합니다.
+  * 폴더 아이콘은 더블클릭하면 해당 폴더가 창으로 열리며, 열린 폴더의 창 역시 드래그를 통해 움직일 수 있어야 합니다.
+  * 처음에는 세 개의 아이콘이 있으며, 그 중 두 개는 폴더입니다.
+* 이번 퀘스트에서는 바탕화면 시스템을 만들기 위한 준비작업을 할 예정입니다.
+  * 어떤 클래스들이 필요할지 생각해 보세요.
+  * 각 클래스들의 멤버변수와 멤버함수는 어떤 것이 있을지 설계해 보세요.
+  * 각 클래스들의 생성자에는 무엇이 들어가야 할지 설계해 보세요.
+
+
+- Quest 06 ~ Quest 07 을 통해, 웹 상에서 동작하는 간단한 바탕화면 시스템을 만들 예정입니다.
+- 요구사항은 다음과 같습니다:
+  - 아이콘은 폴더와 일반 아이콘, 두 가지의 종류가 있습니다.
+  - 아이콘들을 드래그를 통해 움직일 수 있어야 합니다.
+  - 폴더 아이콘은 더블클릭하면 해당 폴더가 창으로 열리며, 열린 폴더의 창 역시 드래그를 통해 움직일 수 있어야 합니다.
+  - 처음에는 세 개의 아이콘이 있으며, 그 중 두 개는 폴더입니다.
+  - Drag & Drop API 를 사용하지 말고, 실제 마우스 이벤트(mouseover, mousedown, mouseout 등)를 사용하여 구현해 보세요!
+- 이번 퀘스트에서는 실제 바탕화면 코드를 구현해야 합니다.
+  - 위의 Checklist 에 있는 변경사항을 생각한다면 어떤 식으로 구현해야 할까요?
+
+
+
+
+	

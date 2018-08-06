@@ -1,0 +1,106 @@
+-install
+  바벨 7버전부터는 모든 바벨 패키지들이 @babel이라는 네임스페이스 안에 속하게 됨
+    npm install --save-dev @babel/cli @babel/core @babel/preset-env @babel/preset-stage-2
+  6버전
+    npm install --save-dev babel-cli babel-core babel-preset-env babel-preset-stage-2  
+  명령 프롬프트에서 babel 명령어를 사용할 수 있습니다(@babel/cli의 역할).
+  하지만 직접 명령어를 치기보다는 npm과 package.json 파일을 사용하여 하는 게 더 간편합니다.
+
+
+-.babelrc라는 파일을 만들어 설치한 preset을 연결해줍니다.
+  .babelrc는 바벨에 대해 설정을 하는 파일입니다. 여기에 preset이나 plugin을 연결하면 됩니다. preset은 여러 플러그인의 모음집입니다.
+  유명한 preset으로는 react나 es2015, es2016, es2017, env, stage-0, stage-1, stage-2, stage-3 등이 있습니다.
+  {
+    "presets": [
+      ["@babel/preset-env", { "targets": { "browsers": ["last 2 versions", ">= 5% in KR"] } }],
+      ["@babel/preset-stage-2", { "decoratorsLegacy": true }]
+    ]
+  }
+  targets 옵션을 살펴보면, 브라우저들에 대해서는 최신 두 버전(IE는 10과 11, 크롬과 파이어폭스, 사파리, 엣지는 최신 두 버전),
+  한국에서 5% 이상 점유율을 차지하는 브라우저를 모두 지원하라고 설정
+
+  만약 브라우저 대신 노드 환경에서 바벨을 쓰고 싶다면(극히 드물지만, 리액트 서버사이드 렌더링을 하는 것과 같은 경우에 쓰기도 합니다) 
+  { targets: { node: 'current' } } 등을 지정
+  decoratorsLegacy는 stage-2의 decorators를 사용하기 위한 옵션입니다.
+
+
+-package.json에는 scripts 부분에 바벨로 컴파일하는 부분을 기재해줍니다.
+  {
+    "scripts": {
+      "build": "babel src -d lib"
+    }
+  }
+  npm run build 명령을 수행할 때 babel을 실행하고, src 폴더에 있는 최신 자바스크립트 코드를 컴파일하여 결과를 lib 폴더에 넣으라는 뜻
+  (-d 옵션이 결과를 저장할 경로를 의미합니다.)
+   컴파일하는 과정에서 알아서 .babelrc 파일을 읽어 옵션을 적용합니다.
+
+
+-babel-polyfill
+  바벨 그 자체로는 ES2015의 새로운 객체(Promise, Map, Set 등등)과 메소드(Array.find, Object.assign 등등)을 사용할 수 없습니다.
+  왜냐하면 ES2015에서 처음 생긴 거라 구형 자바스크립트에는 그에 상응하는 코드가 없거든요. 
+  그래서 babel-polyfill을 설치해야 새로운 기능을 사용할 수 있습니다.
+
+  @babel/poyfill 패키지를 먼저 설치합니다. 6버전까지는 babel-polyfill이었습니다.
+    npm install @babel/polyfill
+  
+  ES2015 문법을 사용하는 파일 가장 윗부분에 다음 줄을 추가합니다.
+    import '@babel/polyfill';
+  
+  단, 폴리필은 하나의 프로젝트에 한 번만 사용해야 합니다. 그렇지 않으면 충돌이 발생합니다. 
+  따라서 가장 먼저 로딩되는 스크립트 제일 위에 추가하도록 합시다.
+  구문을 넣으면 babel이 컴파일할 때 알아서 적용
+    import '@babel/polyfill';
+    import ...
+    const val = Object.assign({ a: '1' }, { a: 'b' });
+    export default val;
+
+  웹팩을 사용한다면 파일에 import '@babel/polyfil';하는 대신 웹팩 설정 파일 entry에 적어도 됩니다.
+  웹팩이 알아서 app.js에 polyfill을 적용해줍니다.
+    webpack.config.js
+    {
+      entry: ['@babel/polyfill', './app.js'],
+    }
+
+Q:7버전에서 웹팩사용시 @babel/core 인식
+A:babel-loader도 babel-loader@^8.0.0-beta를 설치하셔야 합니다. 웹팩 강좌에 있습니다
+
+Q:ES6로 코드를 작성하다가 요구사항변경으로 익스10도 호환가능해야 한다고해서 babel로 제 코드를 컴파일을 하려고하는데, Map을 사용하였기 때문에 import 'babel-polyfill';을 제 스크립트에 추가해서 작성하였습니다. 그런데 컴파일 후 파일에 require(
+'babel-polyfill') 이라는 코드가 생겨서 그냥 생성해주는가보다 하고 ie10에 맞춰놓고 테스트를 했는데 require가 정의되지 않았습니다. 라는 오류가 떳습니다. 혹시 제가 추가적으로 해야할 설정이 남은건가요? .bablerc에는 preset 속성만 es2015 , stage-2 만 주었습니다.
+
+A:바벨 폴리필을 import하지 마시고, script 파일을 구하셔서 스크립트로 넣어보세요.
+
+국가별 사용량은 browserslist
+
+
+npm
+설치된 모듈 확인
+npm list
+npm list –depth=0  (1단만확인)
+
+글로벌 모듈 확인
+npm list –g
+npm list –g –depth=0
+
+npm uninstall 모듈명
+npm uninstall –g 모듈명
+
+글로벌 모듈이 설치된 위치
+Mac
+/usr/local/node_modules
+
+windows
+C:\Program Files\nodejs\node_modules
+
+
+version완전히 일치
+=version완전히 일치
+>version큰 버전
+>=version크거나 같은 버전
+<version작은 버전
+<=version작거나 같은 버전
+~version범위( ~1.15.2는 1.15.2~1.15.3보다 작음 )
+
+
+
+
+
